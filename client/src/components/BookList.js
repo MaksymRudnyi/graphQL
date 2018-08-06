@@ -1,17 +1,10 @@
 import React from "react";
 import {Query} from "react-apollo";
-import gql from "graphql-tag";
+import {getBooksQuery} from "../queries/queries"
 
 const BookList = () => (
 	<Query
-		query={gql`
-      {
-		books{
-			name,
-			id
-		}
-	}
-    `}
+		query={getBooksQuery}
 	>
 		{({loading, error, data}) => {
 			if (loading) {
