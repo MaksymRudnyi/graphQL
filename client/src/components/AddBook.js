@@ -1,47 +1,64 @@
-import React from "react";
-import {Query} from "react-apollo";
-import {getAuthorsQuery} from "../queries/queries"
+import React, {Component} from 'react';
+import {Query} from 'react-apollo';
+import {getAuthorsQuery} from '../queries/queries'
 
-const AddBook = () => (
-	<Query
-		query={getAuthorsQuery}
-	>
-		{({loading, error, data}) => {
-			if (loading) {
-				return <p>Loading...</p>;
-			}
-			if (error) {
-				console.log('error: ', error);
-				return <p>Error :(</p>;
-			}
+class AddBook extends Component {
+	constructor (props) {
+		super(props);
+		this.state = {
+			name: '',
+			genre: '',
+			authorId: ''
+		}
+	}
 
-			return (
-				<form id="add-book">
-					<div className="field">
-						<label>Book name:</label>
-						<input type="text"/>
-					</div>
+	submitForm(e) {
+		e.preventDefault();
+		console.log(this.state);
+	}
 
-					<div className="field">
-						<label>Genre:</label>
-						<input type="text"/>
-					</div>
+	render () {
+		return (
+			<Query
+				query={getAuthorsQuery}
+			>
+				{({loading, error, data}) => {
+					if (loading) {
+						return <p>Loading...</p>;
+					}
+					if (error) {
+						console.log('error: ', error);
+						return <p>Error :(</p>;
+					}
 
-					<div className="field">
-						<label>Authror:</label>
-						<select>
-							{data.authors.map(author => {
-								return (<option key={author.id} value={author.id}>{author.name}</option>)
-							})}
-						</select>
-					</div>
+					return (
+						<form id="add-book" onSubmit={this.submitForm.bind(this)}>
+							<div className="field">
+								<label>Book name:</label>
+								<input type="text" onChange={(e) => {this.setState({name: e.target.value})}}/>
+							</div>
 
-					<button>+</button>
+							<div className="field">
+								<label>Genre:</label>
+								<input type="text" onChange={(e) => {this.setState({genre: e.target.value})}}/>
+							</div>
 
-				</form>
-			)
-		}}
-	</Query>
-);
+							<div className="field">
+								<label>Authror:</label>
+								<select onChange={(e) => {this.setState({authorId: e.target.value})}}>
+									{data.authors.map(author => {
+										return (<option key={author.id} value={author.id}>{author.name}</option>)
+									})}
+								</select>
+							</div>
+
+							<button>+</button>
+
+						</form>
+					)
+				}}
+			</Query>)
+	}
+};
 
 export default AddBook
