@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Query, Mutation} from "react-apollo";
-import {getAuthorsQuery, addBookMutation} from "../queries/queries";
+import {getAuthorsQuery, getBooksQuery, addBookMutation} from "../queries/queries";
 
 class AddBook extends Component {
 	constructor (props) {
@@ -35,7 +35,10 @@ class AddBook extends Component {
 								<form id="add-book" onSubmit={ e => {
 									e.preventDefault();
 									const {name, genre, authorId} = this.state;
-									addBook({variables: {name, genre, authorId}});
+									addBook({
+										variables: {name, genre, authorId},
+										refetchQueries: [{query: getBooksQuery}]
+									});
 								}}>
 									<div className="field">
 										<label>Book name:</label>
